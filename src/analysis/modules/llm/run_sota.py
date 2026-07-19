@@ -128,7 +128,7 @@ def main():
     print(f"CZAS WYKONANIA: {elapsed_time // 60} min {elapsed_time % 60} sek.")
     print("="*50)
 
-    print(f"\n--- WYNIKI ---")
+    print("\n--- WYNIKI ---")
     print(f"ID: {res_id}")
     print(f"Tytuł: {res_title}")
     print(f"Wynik: {res_score}%")

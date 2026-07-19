@@ -111,7 +111,7 @@ if __name__ == "__main__":
     
     print(f"Szukam pliku PDF pod ścieżką: {THESIS_PATH}")
     if not os.path.exists(str(THESIS_PATH)):
-        print(f"BŁĄD KRYTYCZNY: Plik PDF nie istnieje! Upewnij się, że w config.py masz poprawną ścieżkę absolutną.")
+        print("BŁĄD KRYTYCZNY: Plik PDF nie istnieje! Upewnij się, że w config.py masz poprawną ścieżkę absolutną.")
         sys.exit(1)
         
     print("Rozpoczynam ekstrakcję PDF...")

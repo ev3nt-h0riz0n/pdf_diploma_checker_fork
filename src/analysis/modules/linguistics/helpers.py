@@ -21,7 +21,6 @@ LT_DATA_DIR = os.path.join(app_data, "DiplomaChecker", "LanguageTool")
 os.makedirs(LT_DATA_DIR, exist_ok=True)
 os.environ["LTP_PATH"] = LT_DATA_DIR
 
-import language_tool_python
 morf = morfeusz2.Morfeusz()
 spell = SpellChecker()
 spell.word_frequency.load_text_file(resource_path(os.path.join("analysis", "modules", "linguistics", "word_whitelist.txt")))

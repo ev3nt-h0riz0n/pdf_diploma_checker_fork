@@ -16,7 +16,6 @@ LINGUISTICS_DIR = os.path.join(SRC_DIR, "analysis", "modules", "linguistics")
 LLM_DIR = os.path.join(SRC_DIR, "analysis", "modules", "llm")
 REDACTION_DIR = os.path.join(SRC_DIR, "analysis", "modules", "redaction")
 
-from common.path import resource_path
 
 for path in [SRC_DIR, BASE_DIR, EXTRACTION_DIR, COMMON_DIR, LINGUISTICS_DIR, LLM_DIR, REDACTION_DIR]:
     if path not in sys.path:
@@ -210,7 +209,7 @@ class AnalysisPipeline:
 
                 return redaction_errors
 
-            except Exception as e:
+            except Exception:
                 import traceback
                 traceback.print_exc()
 

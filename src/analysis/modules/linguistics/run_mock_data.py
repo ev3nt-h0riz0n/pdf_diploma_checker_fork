@@ -42,8 +42,8 @@ if __name__ == "__main__":
         mapper = PDFMapper()
         raw_blocks = mapper.map_to_schema(document)
         extracted_acronyms = raw_blocks.reference_sections.acronyms
-    except AttributeError as e:
-        print(f"Ekstrakcja zakończyła się niepowodzeniem.")
+    except AttributeError:
+        print("Ekstrakcja zakończyła się niepowodzeniem.")
     else:
         extract_errors_to_json(raw_blocks, "final_document_raw.json")
         matches = run_linguistics(raw_blocks, extracted_acronyms)

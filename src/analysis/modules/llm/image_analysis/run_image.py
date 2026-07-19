@@ -1,5 +1,3 @@
-import sys
-import os
 import json
 import re
 import gc
@@ -81,7 +79,7 @@ def analyze_images(doc_obj, mapped_doc, verbose=False):
         return final_report
 
     if verbose:
-        print(f"\n[AI] Ładowanie modelu wizyjnego LLaVA do VRAM...")
+        print("\n[AI] Ładowanie modelu wizyjnego LLaVA do VRAM...")
         
     llava = LlavaEngine()
     extracted_image_data = {}
@@ -92,13 +90,13 @@ def analyze_images(doc_obj, mapped_doc, verbose=False):
         extracted_image_data[img["id"]] = llava.extract_data(img["bytes"])
   
     if verbose:
-        print(f"\n[AI] Koniec pracy LLaVA. Zwalniam VRAM karty graficznej...")
+        print("\n[AI] Koniec pracy LLaVA. Zwalniam VRAM karty graficznej...")
         
     del llava
     gc.collect() 
 
     if verbose:
-        print(f"\n[AI] Ładowanie Sędziego (Gemma) do VRAM...")
+        print("\n[AI] Ładowanie Sędziego (Gemma) do VRAM...")
         
     checker = ConsistencyChecker()
     

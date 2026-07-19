@@ -1,5 +1,4 @@
 import sys
-import os
 import json
 import re
 import gc
@@ -102,7 +101,7 @@ def get_font_consistency_report(doc_obj, mapped_doc, verbose=False):
     if not images:
         return bad_fonts_report
 
-    if verbose: print(f"\n[AI] Ładowanie modelu wizyjnego LLaVA (Spójność Czcionek) do VRAM...")
+    if verbose: print("\n[AI] Ładowanie modelu wizyjnego LLaVA (Spójność Czcionek) do VRAM...")
     
     llava = LlavaFontEngine()
     
@@ -119,7 +118,7 @@ def get_font_consistency_report(doc_obj, mapped_doc, verbose=False):
                 "szczegoly_ai": assessment.get("reason", "Model AI zauważył drastyczne różnice w wielkościach tekstu.")
             })
             
-    if verbose: print(f"[AI] Zwalniam VRAM po analizie czcionek...")
+    if verbose: print("[AI] Zwalniam VRAM po analizie czcionek...")
     del llava
     gc.collect()
     
