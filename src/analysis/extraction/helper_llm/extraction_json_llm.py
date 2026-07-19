@@ -607,7 +607,7 @@ def extractPDF_llm(file_path: str) -> DocumentData:
         # musimy ustalić standard zglaszania bledow
         # na razie print
         #   ~Bartek 08.03
-        print(f"plik nie istnieje")
+        print("plik nie istnieje")
         return
 
     # sprawdzenie czy mamy folder "images", jeśli nie to tworzymy taki
@@ -729,7 +729,7 @@ def extractPDF_llm(file_path: str) -> DocumentData:
                     pix = fitz.Pixmap(block["image"])
                     if pix.is_unicolor:
                         continue
-                except:
+                except Exception:
                     pass
 
                 img_rect = fitz.Rect(block["bbox"])
@@ -941,12 +941,6 @@ def line_spacing(curr_line: float, prev_line: float, font_size: float) -> float 
         )  # Z jakiegoś powodu trzeba przeskalować do 1.2 ??
     else:
         return None
-
-
-def dominant_spacing(doc: fitz.Document) -> float:
-    spacings = []
-    for page in doc:
-        blocks = page.get_text("dict")
 
 
 def is_footer(

@@ -60,11 +60,11 @@ if doc_data is not None:
     doc_data.to_json(output_path)
     print("[extraction_json] JSON wygenerowany")
 else:
-    print(f"[extraction_json] Nie wygenerowano pliku JSON")
+    print("[extraction_json] Nie wygenerowano pliku JSON")
 
 
 # -----------------------przykład dla converter_linguistics.py-----------------------
-from analysis.extraction.converter_linguistics_clean import PDFMapper, get_acronyms_lut
+from analysis.extraction.converter_linguistics_clean import PDFMapper
 import json
 from dataclasses import asdict
 

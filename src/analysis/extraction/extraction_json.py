@@ -8,7 +8,6 @@ import fitz  # PyMuPDF
 import statistics
 from typing import Dict, List
 import re
-import sys
 
 from analysis.extraction.bare_struct import (
     DocumentData,
@@ -450,8 +449,8 @@ def extract_apa_tables(
         if len(current_group) >= 2:
             top_y = current_group[0].y0 - 10
             bottom_y = current_group[-1].y1 + 10
-            min_x = min(l.x0 for l in current_group) - 10
-            max_x = max(l.x1 for l in current_group) + 10
+            min_x = min(line.x0 for line in current_group) - 10
+            max_x = max(line.x1 for line in current_group) + 10
             apa_rect = fitz.Rect(min_x, top_y, max_x, bottom_y)
             grouped_table_rects.append(apa_rect)
 
@@ -1171,7 +1170,7 @@ def extractPDF(file_path: str) -> DocumentData:
     current_span_id = 0
     if not os.path.exists(file_path):
         # TODO:tutaj jakis wyjatek
-        print(f"plik nie istnieje")
+        print("plik nie istnieje")
         return
 
     # sprawdzenie czy mamy folder "images", jeśli nie to tworzymy taki
@@ -1641,12 +1640,6 @@ def line_spacing(curr_line: float, prev_line: float, font_size: float) -> float 
         return None
 
 
-def dominant_spacing(doc: fitz.Document) -> float:
-    spacings = []
-    for page in doc:
-        blocks = page.get_text("dict")
-
-
 def is_footer(raw_block: dict, page_height: float, page_num: int) -> bool:
     bbox = raw_block["bbox"]
 
@@ -1701,12 +1694,12 @@ def extract_TOC(doc: fitz.Document, pages: list[PageData]) -> TocData | None:
         page_text = ""
 
         for y in sorted(y_groups.keys()):
-            lines_on_y = sorted(y_groups[y], key=lambda l: l.bbox[0])
+            lines_on_y = sorted(y_groups[y], key=lambda line: line.bbox[0])
 
             fragments = []
-            for l in lines_on_y:
-                for s in l.spans:
-                    txt = s.text.strip()
+            for line in lines_on_y:
+                for span in line.spans:
+                    txt = span.text.strip()
                     if txt:
                         fragments.append(txt)
 
@@ -1735,7 +1728,9 @@ def extract_TOC(doc: fitz.Document, pages: list[PageData]) -> TocData | None:
                 dotted_level = num_match.group(1).count(".") + 1 if num_match else 1
 
                 is_bold = any(
-                    "bold" in s.font.lower() for l in lines_on_y for s in l.spans
+                    "bold" in span.font.lower()
+                    for line in lines_on_y
+                    for span in line.spans
                 )
 
                 if is_bold and gap_level == 1:
@@ -1771,8 +1766,14 @@ def extract_TOC(doc: fitz.Document, pages: list[PageData]) -> TocData | None:
     built_in_toc = doc.get_toc()
     if built_in_toc:
         entries = [
-            TocEntry(level=l, title=t.strip(), page=p, bbox=(0, 0, 0, 0), src_page=-1)
-            for l, t, p in built_in_toc
+            TocEntry(
+                level=level,
+                title=title.strip(),
+                page=page,
+                bbox=(0, 0, 0, 0),
+                src_page=-1,
+            )
+            for level, title, page in built_in_toc
         ]
         return TocData(page_nums=[-1], entries=entries, text="Wykryto z metadanych")
 
@@ -1826,10 +1827,16 @@ def extract_TOF(
         for y in sorted(y_groups.keys()):
             first_line_in_group = y_groups[y][0]
             if first_line_in_group.bbox[1] < (page_obj.height * 0.15):
-                lines_on_y = sorted(y_groups[y], key=lambda l: l.bbox[0])
-                for l in lines_on_y:
+                lines_on_y = sorted(y_groups[y], key=lambda line: line.bbox[0])
+                for line in lines_on_y:
                     top_lines_text += (
-                        " ".join([s.text.strip() for s in l.spans if s.text.strip()])
+                        " ".join(
+                            [
+                                span.text.strip()
+                                for span in line.spans
+                                if span.text.strip()
+                            ]
+                        )
                         + " "
                     )
             else:
@@ -1853,11 +1860,11 @@ def extract_TOF(
         cut_obj_num = ""
         cut_title = ""
         for y in sorted(y_groups.keys()):
-            lines_on_y = sorted(y_groups[y], key=lambda l: l.bbox[0])
+            lines_on_y = sorted(y_groups[y], key=lambda line: line.bbox[0])
             fragments = []
-            for l in lines_on_y:
-                for s in l.spans:
-                    txt = s.text.strip()
+            for line in lines_on_y:
+                for span in line.spans:
+                    txt = span.text.strip()
                     if txt:
                         fragments.append(txt)
             if not fragments:
@@ -1978,10 +1985,16 @@ def extract_TOT(
         for y in sorted(y_groups.keys()):
             first_line_in_group = y_groups[y][0]
             if first_line_in_group.bbox[1] < (page_obj.height * 0.15):
-                lines_on_y = sorted(y_groups[y], key=lambda l: l.bbox[0])
-                for l in lines_on_y:
+                lines_on_y = sorted(y_groups[y], key=lambda line: line.bbox[0])
+                for line in lines_on_y:
                     top_lines_text += (
-                        " ".join([s.text.strip() for s in l.spans if s.text.strip()])
+                        " ".join(
+                            [
+                                span.text.strip()
+                                for span in line.spans
+                                if span.text.strip()
+                            ]
+                        )
                         + " "
                     )
             else:
@@ -2005,11 +2018,11 @@ def extract_TOT(
         cut_obj_num = ""
         cut_title = ""
         for y in sorted(y_groups.keys()):
-            lines_on_y = sorted(y_groups[y], key=lambda l: l.bbox[0])
+            lines_on_y = sorted(y_groups[y], key=lambda line: line.bbox[0])
             fragments = []
-            for l in lines_on_y:
-                for s in l.spans:
-                    txt = s.text.strip()
+            for line in lines_on_y:
+                for span in line.spans:
+                    txt = span.text.strip()
                     if txt:
                         fragments.append(txt)
             if not fragments:

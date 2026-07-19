@@ -181,7 +181,7 @@ class PDFMapper_llm:
                 word_counter = 0
 
                 temp_text = (
-                    "".join(s.text for l in block.lines for s in l.spans)
+                    "".join(s.text for line in block.lines for s in line.spans)
                     .strip()
                     .lower()
                 )

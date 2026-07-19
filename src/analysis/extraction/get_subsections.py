@@ -41,7 +41,7 @@ def get_subsections(pages: list[PageData], toc_entries: list[TocEntry]) -> list[
                     continue
 
                 block_text = " ".join(
-                    [" ".join([s.text for s in l.spans]) for l in block.lines]
+                    [" ".join([s.text for s in line.spans]) for line in block.lines]
                 )
                 block_text = " ".join(block_text.split()).strip()
                 clean_text = block_text.lower()

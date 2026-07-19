@@ -6,8 +6,6 @@ przyjazny dla dalszej analizy lingwistycznej i NLP.
 
 import re
 import statistics
-import fitz  # PyMuPDF
-from typing import Dict
 
 from analysis.extraction.schema import (
     FinalDocument,
@@ -287,8 +285,8 @@ class PDFMapper:
             top_thresh = 50
             bottom_thresh = page.height - 75
 
-            page_table_descs = {t.description for t in page.tables if t.description}
-            page_img_descs = {img.description for img in page.images if img.description}
+            # page_table_descs = {t.description for t in page.tables if t.description}
+            # page_img_descs = {img.description for img in page.images if img.description}
 
             table_bboxes = [t.bbox for t in page.tables]
 
@@ -306,7 +304,7 @@ class PDFMapper:
                 word_counter = 0
 
                 temp_text = (
-                    "".join(s.text for l in block.lines for s in l.spans)
+                    "".join(span.text for line in block.lines for span in line.spans)
                     .strip()
                     .lower()
                 )
@@ -444,12 +442,6 @@ class PDFMapper:
                             is_new_paragraph = True
                             debug_reason = "wcięcie na początku bloku/strony"
 
-                    is_list_continuation = bool(
-                        list_buffer
-                        and PDFMapper.is_continuation(
-                            list_buffer[-1]["bbox"], list(block.bbox)
-                        )
-                    )
                     if is_valid_list_cont:
                         is_new_paragraph = False
 
@@ -548,13 +540,14 @@ class PDFMapper:
                 if len(full_text) < 2:
                     continue
 
-                normalized_text = re.sub(r"\s+", " ", full_text).strip()
-                clean_table_descs = {
-                    re.sub(r"\s+", " ", d).strip() for d in page_table_descs
-                }
-                clean_img_descs = {
-                    re.sub(r"\s+", " ", d).strip() for d in page_img_descs
-                }
+                # TODO Zrozumieć co tu się dzieje
+                # normalized_text = re.sub(r"\s+", " ", full_text).strip()
+                # clean_table_descs = {
+                #    re.sub(r"\s+", " ", d).strip() for d in page_table_descs
+                # }
+                # clean_img_descs = {
+                #    re.sub(r"\s+", " ", d).strip() for d in page_img_descs
+                # }
 
                 current_type = None
                 # if normalized_text in clean_table_descs:

@@ -669,12 +669,14 @@ class PDFMapper:
             word_counter = 0
 
             temp_text = (
-                "".join(s.text for l in block.lines for s in l.spans).strip().lower()
+                "".join(span.text for line in block.lines for span in line.spans)
+                .strip()
+                .lower()
             )
             x0, y0, x1, y1 = block.bbox
 
             raw_block_text_for_check = "".join(
-                s.text for l in block.lines for s in l.spans
+                span.text for line in block.lines for span in line.spans
             ).strip()
             is_visual_caption = bool(
                 img_pattern.match(raw_block_text_for_check)
@@ -1688,7 +1690,7 @@ class PDFMapper:
 
         # Sprawdzamy myślniki pobierając tylko tekst
         uses_dashes = any(
-            re.search(acr_dash_pattern, l[0].strip()) for l in reconstructed_lines
+            re.search(acr_dash_pattern, line[0].strip()) for line in reconstructed_lines
         )
 
         for raw_line, line_page in reconstructed_lines:
