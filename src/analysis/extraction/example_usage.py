@@ -1,4 +1,5 @@
-'''-----------------------przykład dla extraction_json.py-----------------------'''
+"""-----------------------przykład dla extraction_json.py-----------------------"""
+
 from pathlib import Path
 import sys
 
@@ -16,8 +17,8 @@ if str(BASE_DIR) not in sys.path:
 
 from analysis.extraction.extraction_json import extractPDF
 
-#input_path = PROJECT_ROOT / "data"  / "mock_data"/ "mock1.pdf"
-input_path = PROJECT_ROOT / "data"  / "jabi.pdf"
+# input_path = PROJECT_ROOT / "data"  / "mock_data"/ "mock1.pdf"
+input_path = PROJECT_ROOT / "data" / "jabi.pdf"
 
 output_path = PROJECT_ROOT / "src" / "output.json"
 
@@ -27,7 +28,7 @@ output_path = PROJECT_ROOT / "src" / "output.json"
 # TODO: dodać więcej przykładowych plików pdf do folderu /redaction_debug
 # Format nazwy pdfa: <aspekt_do_sprawdzenia>_example.pdf
 debug_mode = 0
-debug_type = "toc" # zmiana trybu debugowania (wpisać interesujący nas aspekt)
+debug_type = "toc"  # zmiana trybu debugowania (wpisać interesujący nas aspekt)
 
 # ZAKOMENTOWANO: Stary zapis z metodą .format(), która słabo współpracuje z obiektami Path
 # debug_path = str(PROJECT_ROOT / "src" / "analysis" / "extraction" / "redaction_debug" / "{debug_type}_example.pdf")
@@ -36,21 +37,30 @@ if debug_mode == 0:
     pdf_path = Path(input_path)
 elif debug_mode == 1:
     # ZMIENIONO: Bezpieczne tworzenie ścieżki za pomocą f-stringa na poziomie Path
-    candidate = PROJECT_ROOT / "src" / "analysis" / "extraction" / "redaction_debug" / f"{debug_type}_example.pdf"
+    candidate = (
+        PROJECT_ROOT
+        / "src"
+        / "analysis"
+        / "extraction"
+        / "redaction_debug"
+        / f"{debug_type}_example.pdf"
+    )
     if candidate.exists():
         pdf_path = candidate
     else:
-        print(f"[extraction_json] Debug PDF not found: {candidate}. Falling back to default thesis path.")
+        print(
+            f"[extraction_json] Debug PDF not found: {candidate}. Falling back to default thesis path."
+        )
         pdf_path = Path(input_path)
 
 doc_data = extractPDF(str(pdf_path))
 
-#TODO: dodac warunek sprqwdzjaacy blad do testow
+# TODO: dodac warunek sprqwdzjaacy blad do testow
 if doc_data is not None:
-    doc_data.to_json(output_path) 
+    doc_data.to_json(output_path)
     print("[extraction_json] JSON wygenerowany")
 else:
-    print(f"[extraction_json] Nie wygenerowano pliku JSON") 
+    print(f"[extraction_json] Nie wygenerowano pliku JSON")
 
 
 # -----------------------przykład dla converter_linguistics.py-----------------------

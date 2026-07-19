@@ -15,10 +15,17 @@ sys.path.append(parent_dir)
 from converter_linguistics import extractPDF, PDFMapper
 from error_info import ErrorChecker
 
+
 def main():
     input_pdf_path = PROJECT_ROOT / "data" / "zusz.pdf"
-    output_error_json_path = PROJECT_ROOT / "src" / "analysis" / "extraction" / "error_check" / "output_error.json"
-    
+    output_error_json_path = (
+        PROJECT_ROOT
+        / "src"
+        / "analysis"
+        / "extraction"
+        / "error_check"
+        / "output_error.json"
+    )
 
     print(f"Rozpoczynam przetwarzanie pliku: {input_pdf_path}")
 
@@ -27,13 +34,14 @@ def main():
     print("Mapowanie struktury dokumentu zakończone.")
 
     print("Rozpoczynam analizę błędów (Linter)...")
-    
+
     checker = ErrorChecker()
     checker.check_document(mapped_doc)
-    
+
     checker.save_to_json(output_error_json_path)
-    
+
     print(f"Analiza zakończona. Wyniki zapisano do: {output_error_json_path}")
+
 
 if __name__ == "__main__":
     main()
