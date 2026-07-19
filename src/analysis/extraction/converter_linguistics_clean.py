@@ -4,8 +4,7 @@ a form better suited for linguistics and LLM
 '''
 import re
 import statistics
-import fitz  # PyMuPDF
-from typing import Dict
+
 
 from analysis.extraction.schema import (
     FinalDocument, ParagraphBlock, ListBlock, ListItem, 
@@ -14,7 +13,7 @@ from analysis.extraction.schema import (
 )
 
 from analysis.extraction.extraction_json import DocumentData, extractPDF, calculate_margins
-from analysis.extraction.schema import PageArtifact, is_acronym, find_table_description, find_image_description, is_widow_func, is_bekart_func, is_szewc_func 
+from analysis.extraction.schema import PageArtifact, is_acronym, is_widow_func, is_bekart_func, is_szewc_func 
 class PDFMapper:
     
     # Stałe
@@ -81,7 +80,8 @@ class PDFMapper:
             bool: True if the words format matches a heading (fully bold/italic and short, 
             or has an unusually large average size), False otherwise.
         """
-        if not words: return False
+        if not words: 
+            return False
         is_bold = all(w.bold for w in words)
         is_italic = all(w.italic for w in words)
         avg_size = sum(w.size for w in words) / len(words)
@@ -100,7 +100,8 @@ class PDFMapper:
             bool: True if the text begins with recognized keyword/abbreviation identifiers 
             (in Polish or English), False otherwise.
         """
-        if not words: return False
+        if not words: 
+            return False
         full_text = " ".join(w.text for w in words).strip()
         if full_text.lower().startswith(("słowa kluczowe", "keywords", "key words", "keywords:", "skróty")):
             return True
@@ -118,7 +119,8 @@ class PDFMapper:
         Returns:
             int: An integer code indicating the detection result (e.g., 0 for not math, 1 for high space density, 2 for dominant math fonts).
         """
-        if not words: return 0
+        if not words: 
+            return 0
 
         full_text_with_spaces = " ".join(w.text for w in words)
         if re.search(r'(?:\.\s*){4,}', full_text_with_spaces):
@@ -138,7 +140,8 @@ class PDFMapper:
             return 2
         
         full_text = "".join(w.text for w in words).replace(" ", "")
-        if not full_text: return 0
+        if not full_text: 
+            return 0
 
         math_chars_pattern = r'[0-9=\+\-\*/<>\∑\∫\∏\√\∞\≈\≠\≡\≤\≥\{\}\(\)\[\]\|\α-\ω\Α-\Ω]'
         math_chars_count = len(re.findall(math_chars_pattern, full_text))
@@ -167,7 +170,8 @@ class PDFMapper:
         """
         bx0, by0, bx1, by1 = block_bbox
         block_area = (bx1 - bx0) * (by1 - by0)
-        if block_area <= 0: return False
+        if block_area <= 0: 
+            return False
 
         for tx0, ty0, tx1, ty1 in table_bboxes:
             ix0 = max(bx0, tx0 - 5)
@@ -431,7 +435,8 @@ class PDFMapper:
         line_gaps = []
         for i in range(len(line.spans) - 1):
             g = line.spans[i+1].bbox[0] - line.spans[i].bbox[2]
-            if g > 0: line_gaps.append(g)
+            if g > 0: 
+                line_gaps.append(g)
         
         m_gap = statistics.median(line_gaps) if line_gaps else 3.0
         prev_span_x1 = None
@@ -448,8 +453,10 @@ class PDFMapper:
                 
                 after_punct = full_text.strip().endswith(('.', '!', '?', ':', ';'))
                 
-                if current_gap > 1.2 * m_gap and not after_punct: full_text += " "
-                if current_gap > 1.5 * m_gap and after_punct: full_text += " "
+                if current_gap > 1.2 * m_gap and not after_punct: 
+                    full_text += " "
+                if current_gap > 1.5 * m_gap and after_punct: 
+                    full_text += " "
 
             # Logika rozdzielania słów
             sub_words = word_text.split()
@@ -845,7 +852,8 @@ class PDFMapper:
         special_bboxes = {} 
         
         def add_entries(entries, tag):
-            if not entries: return
+            if not entries: 
+                return
             for entry in entries:
                 if entry.src_page == -1: 
                     continue 
@@ -1197,17 +1205,21 @@ class PDFMapper:
                     w = []
                     try:
                         if isinstance(obj, dict):
-                            if obj.get("words"): w.extend(obj["words"])
+                            if obj.get("words"): 
+                                w.extend(obj["words"])
                             if obj.get("items"):
-                                for item in obj["items"]: w.extend(fetch_words(item))
+                                for item in obj["items"]: 
+                                    w.extend(fetch_words(item))
                             if obj.get("lines"):
                                 for line in obj["lines"]:
                                     if isinstance(line, dict) and line.get("spans"):
                                         w.extend(line["spans"])
                         else:
-                            if getattr(obj, "words", None): w.extend(obj.words)
+                            if getattr(obj, "words", None): 
+                                w.extend(obj.words)
                             if getattr(obj, "items", None):
-                                for item in obj.items: w.extend(fetch_words(item))
+                                for item in obj.items: 
+                                    w.extend(fetch_words(item))
                             if getattr(obj, "lines", None):
                                 for line in obj.lines:
                                     if hasattr(line, "spans"):
@@ -1244,7 +1256,8 @@ class PDFMapper:
                     elif bbox and len(bbox) >= 2:
                         return float(bbox[1])
                     return 0.0
-                except: return 0.0
+                except Exception:
+                    return 0.0
 
             def get_x0(w):
                 """
@@ -1259,7 +1272,8 @@ class PDFMapper:
                 try:
                     bbox = w.get("bbox") if isinstance(w, dict) else getattr(w, "bbox", None)
                     return float(bbox[0]) if bbox and len(bbox) >= 1 else 0.0
-                except: return 0.0
+                except Exception:
+                    return 0.0
 
             def get_page(w):
                 """
@@ -1274,7 +1288,8 @@ class PDFMapper:
                 try:
                     p = w.get("page_number") if isinstance(w, dict) else getattr(w, "page_number", None)
                     return int(p) if p is not None else 0
-                except: return 0
+                except Exception: 
+                    return 0
 
             def get_text(w):
                 """
@@ -1287,9 +1302,11 @@ class PDFMapper:
                     str: The extracted text string, or an empty string if the extraction fails.
                 """
                 try:
-                    if isinstance(w, dict): return str(w.get("text", ""))
+                    if isinstance(w, dict): 
+                        return str(w.get("text", ""))
                     return str(getattr(w, "text", ""))
-                except: return ""
+                except Exception: 
+                    return ""
 
             unique_words = []
             seen_coords = set()
@@ -1342,7 +1359,7 @@ class PDFMapper:
                 try:
                     b_page = block.get("page_number") if isinstance(block, dict) else getattr(block, "page_number", 0)
                     b_page = int(b_page) if b_page is not None else 0
-                except:
+                except Exception:
                     b_page = 0
                 
                 if b_type in ["acronyms", "paragraph", "math", "list", "text", "table", "heading"]:

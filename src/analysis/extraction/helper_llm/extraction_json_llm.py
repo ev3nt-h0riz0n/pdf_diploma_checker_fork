@@ -46,10 +46,14 @@ def calculate_margins(blocks, width, height) -> Dict[str, float]:
 
     for b in blocks: #iterowanie po rozmiarach każdego z bloczków, szukanie min/max wartości
         x0, y0, x1, y1 = b["bbox"]
-        if x0 < margin_left_buf: margin_left_buf = x0
-        if y0 < margin_top_buf: margin_top_buf = y0
-        if x1 > margin_right_buf: margin_right_buf = x1
-        if y1 > margin_bottom_buf: margin_bottom_buf = y1
+        if x0 < margin_left_buf: 
+            margin_left_buf = x0
+        if y0 < margin_top_buf: 
+            margin_top_buf = y0
+        if x1 > margin_right_buf: 
+            margin_right_buf = x1
+        if y1 > margin_bottom_buf: 
+            margin_bottom_buf = y1
 
     # wyznaczenie faltycznych wielkości marginesów
     margin_top = margin_top_buf
@@ -155,13 +159,17 @@ def find_table_description(table_bbox, text_blocks, priority_side=None):
 
     # Priorytetyzacja:
     # 1. Słowo kluczowe na preferowanej stronie
-    if kw_matches[primary]: return kw_matches[primary][0], primary
+    if kw_matches[primary]: 
+        return kw_matches[primary][0], primary
     # 2. Słowo kluczowe na jakiejkolwiek stronie
-    if kw_matches[secondary]: return kw_matches[secondary][0], secondary
+    if kw_matches[secondary]: 
+        return kw_matches[secondary][0], secondary
     # 3. Zwykły tekst na preferowanej stronie
-    if other_matches[primary]: return other_matches[primary][0], primary
+    if other_matches[primary]: 
+        return other_matches[primary][0], primary
     # 4. Zwykły tekst na jakiejkolwiek stronie
-    if other_matches[secondary]: return other_matches[secondary][0], secondary
+    if other_matches[secondary]: 
+        return other_matches[secondary][0], secondary
 
     return "", priority_side
 
@@ -196,10 +204,14 @@ def find_image_description(image_bbox, text_blocks, priority_side=None):
     secondary = "above" if primary == "below" else "below"
 
     # Logika priorytetów (identyczna jak w tabelach):
-    if kw_matches[primary]: return kw_matches[primary][0], primary
-    if kw_matches[secondary]: return kw_matches[secondary][0], secondary
-    if other_matches[primary]: return other_matches[primary][0], primary
-    if other_matches[secondary]: return other_matches[secondary][0], secondary
+    if kw_matches[primary]: 
+        return kw_matches[primary][0], primary
+    if kw_matches[secondary]: 
+        return kw_matches[secondary][0], secondary
+    if other_matches[primary]: 
+        return other_matches[primary][0], primary
+    if other_matches[secondary]: 
+        return other_matches[secondary][0], secondary
 
     return "", None
 

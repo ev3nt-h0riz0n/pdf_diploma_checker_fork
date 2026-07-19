@@ -289,7 +289,8 @@ def find_table_description(table_bbox: list, logical_blocks: list, priority_side
         
         if is_close_above or is_close_below:
             full_text = block.content.strip()
-            if not full_text: continue
+            if not full_text: 
+                continue
             
             side = "above" if is_close_above else "below"
             
@@ -301,10 +302,14 @@ def find_table_description(table_bbox: list, logical_blocks: list, priority_side
     primary = priority_side if priority_side else "above"
     secondary = "below" if primary == "above" else "above"
 
-    if kw_matches[primary]: return kw_matches[primary][0], primary
-    if kw_matches[secondary]: return kw_matches[secondary][0], secondary
-    if other_matches[primary]: return other_matches[primary][0], primary
-    if other_matches[secondary]: return other_matches[secondary][0], secondary
+    if kw_matches[primary]: 
+        return kw_matches[primary][0], primary
+    if kw_matches[secondary]: 
+        return kw_matches[secondary][0], secondary
+    if other_matches[primary]: 
+        return other_matches[primary][0], primary
+    if other_matches[secondary]: 
+        return other_matches[secondary][0], secondary
 
     return "", priority_side
 
@@ -355,7 +360,8 @@ def find_image_description(image_bbox: list, logical_blocks: list, priority_side
         
         if is_close_above or is_close_below:
             full_text = block.content.strip()
-            if not full_text: continue
+            if not full_text: 
+                continue
             
             side = "above" if is_close_above else "below"
             
@@ -367,10 +373,14 @@ def find_image_description(image_bbox: list, logical_blocks: list, priority_side
     primary = priority_side if priority_side else "below" 
     secondary = "below" if primary == "above" else "above"
 
-    if kw_matches[primary]: return kw_matches[primary][0], primary
-    if kw_matches[secondary]: return kw_matches[secondary][0], secondary
-    if other_matches[primary]: return other_matches[primary][0], primary
-    if other_matches[secondary]: return other_matches[secondary][0], secondary
+    if kw_matches[primary]: 
+        return kw_matches[primary][0], primary
+    if kw_matches[secondary]: 
+        return kw_matches[secondary][0], secondary
+    if other_matches[primary]: 
+        return other_matches[primary][0], primary
+    if other_matches[secondary]: 
+        return other_matches[secondary][0], secondary
 
     return "", priority_side
 

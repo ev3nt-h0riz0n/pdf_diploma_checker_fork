@@ -218,7 +218,8 @@ class PDFMapper_llm:
                     prev_span_x1 = None
                     for span in line.spans:
                         word_text = span.text.replace('\u200b', '').strip()
-                        if not word_text: continue
+                        if not word_text: 
+                            continue
                         
                         if prev_span_x1 is not None:
                             current_gap = span.bbox[0] - prev_span_x1
@@ -259,7 +260,8 @@ class PDFMapper_llm:
                         full_text += " "
                 
                 full_text = full_text.strip()
-                if not full_text: continue
+                if not full_text: 
+                    continue
                 if len(full_text) < 2: 
                     continue
                 

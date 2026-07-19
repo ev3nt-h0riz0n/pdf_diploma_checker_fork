@@ -422,7 +422,8 @@ class PDFMapper:
                     line_gaps = []
                     for i in range(len(line.spans) - 1):
                         g = line.spans[i+1].bbox[0] - line.spans[i].bbox[2]
-                        if g > 0: line_gaps.append(g)
+                        if g > 0: 
+                            line_gaps.append(g)
                     
                     # Mediana pozwala zignorować ekstremalne rozciągnięcia przy justowaniu
                     m_gap = statistics.median(line_gaps) if line_gaps else 3.0
@@ -430,7 +431,8 @@ class PDFMapper:
                     prev_span_x1 = None
                     for span in line.spans:
                         word_text = span.text.replace('\u200b', '').strip()
-                        if not word_text: continue
+                        if not word_text: 
+                            continue
                         
                         if prev_span_x1 is not None:
                             current_gap = span.bbox[0] - prev_span_x1
@@ -475,7 +477,8 @@ class PDFMapper:
 
                 
                 full_text = full_text.strip()
-                if not full_text: continue
+                if not full_text: 
+                    continue
                 if len(full_text) < 2: 
                     continue
                 
