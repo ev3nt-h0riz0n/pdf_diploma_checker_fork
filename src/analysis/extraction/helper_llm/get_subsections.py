@@ -6,8 +6,8 @@ PROJECT_ROOT = BASE_DIR.parents[2]
 
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.analysis.extraction.extraction_json import extractPDF
-from src.analysis.extraction.bare_struct import PageData, TocEntry
+from analysis.extraction.main_extractor import extractPDF
+from analysis.extraction.raw_extraction.bare_struct import PageData, TocEntry
 
 path = PROJECT_ROOT / "data" / "doju1.pdf"
 

@@ -19,8 +19,8 @@ def dump_diagnostics_to_file(pdf_path, output_filename="wynik_teksty.txt"):
     print(f"Rozpoczynam zrzucanie tekstów dla pliku: {pdf_path}")
     print("Trwa ekstrakcja... To może chwilę potrwać.")
     
-    from analysis.extraction.extraction_json import extractPDF
-    from analysis.extraction.converter_linguistics_clean import PDFMapper
+    from analysis.extraction.main_extractor import extractPDF
+    from analysis.extraction.linguistics_extraction.converter_linguistics_clean import PDFMapper
     
     # 1. Ekstrakcja
     doc_obj = extractPDF(str(pdf_path))

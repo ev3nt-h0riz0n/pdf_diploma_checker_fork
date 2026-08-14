@@ -81,7 +81,8 @@ class AnalysisPipeline:
 
         report_progress(10, "Rozpoczynam ekstrakcję tekstu z PDF...")
 
-        from analysis.extraction.extraction_json import extractPDF, get_raster_figure_numbers
+        from analysis.extraction.main_extractor import extractPDF
+        from analysis.extraction.raw_extraction.image_extractor import get_raster_figure_numbers
 
         doc_obj = extractPDF(pdf_path)
         doc_dict = doc_obj._to_dict()
@@ -131,7 +132,7 @@ class AnalysisPipeline:
                 ling_ready_event.set()
 
             try:
-                from analysis.extraction.converter_linguistics_clean import PDFMapper
+                from analysis.extraction.linguistics_extraction.converter_linguistics_clean import PDFMapper
                 import importlib.util
 
                 mapper = PDFMapper()
@@ -186,7 +187,7 @@ class AnalysisPipeline:
         def task_redaction():
             try:
                 from analysis.modules.redaction.redaction_validator import RedactionValidator
-                from analysis.extraction.converter_linguistics_clean import PDFMapper
+                from analysis.extraction.linguistics_extraction.converter_linguistics_clean import PDFMapper
 
                 mapper = PDFMapper()
 

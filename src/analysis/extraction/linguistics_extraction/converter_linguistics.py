@@ -7,7 +7,7 @@ import re
 import statistics
 
 
-from analysis.extraction.schema import (
+from analysis.extraction.linguistics_extraction.schema import (
     FinalDocument,
     ParagraphBlock,
     ListBlock,
@@ -21,12 +21,12 @@ from analysis.extraction.schema import (
     AcronymItem,
 )
 
-from analysis.extraction.extraction_json import (
+from analysis.extraction.main_extractor import (
     DocumentData,
     extractPDF,
     calculate_margins,
 )
-from analysis.extraction.schema import (
+from analysis.extraction.linguistics_extraction.schema import (
     PageArtifact,
     is_acronym,
     is_widow_func,

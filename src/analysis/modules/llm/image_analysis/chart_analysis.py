@@ -140,7 +140,7 @@ def get_chart_correctness_report(doc_obj):
     return json.dumps(bad_charts_report, indent=4, ensure_ascii=False)
 
 if __name__ == "__main__":
-    from analysis.extraction.extraction_json import extractPDF
+    from analysis.extraction.main_extractor import extractPDF
     
     doc_obj = extractPDF(str(config.THESIS_PATH))
     raport_json = get_chart_correctness_report(doc_obj)
